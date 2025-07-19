@@ -140,4 +140,34 @@ ${MKMF_ROOT}/list_paths -l ${expanded}
 ${MKMF_ROOT}/mkmf -t ${TEMPLATE} -o '-I../FMS' -p MOM6 -l '-L../FMS -lfms' -c '-Duse_libMPI -Duse_netCDF -DSPMD' path_names
 make -j${JOBS} DEBUG=${DEBUG} MOM6
 
+# 3) Install AMReX Library
+
+# Path to where the AMReX repository was cloned
+export AMREX_HOME=${ROOTDIR}/src/amrex
+
+# Path to where the intermediate files are generated while building the AMReX library will be stored
+export AMREX_BUILD_DIR=${BLD_PATH}/amrex_build
+mkdir -p ${AMREX_BUILD_DIR}
+
+# Adding an install dirctory to mirror bin and src. Maybe we want to put installed libraries in a different place?
+INSTALL_PATH=${ROOTDIR}/install/${COMPILER}
+if [ "${DEBUG}" == 1 ]; then
+  INSTALL_PATH=${INSTALL_PATH}-debug
+fi
+mkdir -p ${INSTALL_PATH}
+# Path to where the AMReX library will be installed
+export AMREX_INSTALL_DIR=${INSTALL_PATH}/amrex_install
+mkdir -p ${AMREX_INSTALL_DIR}
+
+module load cmake
+
+# Configure the build using CMake with all default options. Can add more options as needed.
+cmake -DCMAKE_INSTALL_PREFIX="$AMREX_INSTALL_DIR" \
+      -S "$AMREX_HOME" \
+      -B "$AMREX_BUILD_DIR"
+
+cd "$AMREX_BUILD_DIR"
+make -j${JOBS} install
+make test_install
+
 echo "Finished build at `date`"
