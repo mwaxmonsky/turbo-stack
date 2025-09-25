@@ -1,0 +1,41 @@
+name: Clang Tidy Dry Run
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+     - clang-tidy-workflow
+
+jobs:
+  format:
+    name: Run Clang-Tidy
+    runs-on: ubuntu-latest
+
+    container:
+      image: ncarcisl/hpcdev-x86_64:almalinux10-gcc12-mpich-latest
+
+    steps:
+      - name: Install Clang-Tidy
+        run: sudo apt-get update && sudo apt-get install clang-tidy && clang-tidy --version
+
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build TURBO
+        run: |
+          cd src/development_tests_amrex_tripolar_grid
+          cmake -S. -B./build
+
+      - name: Analyze code
+        run: |
+          cd src/development_tests/amrex/tripolar_grid
+          run-clang-tidy -p./build \
+                         -header-filter="turbo*" \                                    #TODO: determine if needed
+                         -exclude-header-filter="/usr/local/.*,/container/.*" \       #TODO: find better way of excluding third party headers
+                         -use-color \
+                         -extra-arg="-I/container/mpich/4.3.1/include" \              #TODO: find better way of adding mpi include path
+                         ./src/*                                                      #TODO: Include all source files and header files, not just .cpp files.
+
