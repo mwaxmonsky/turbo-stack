@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Install Clang-Tidy
-        run: sudo dnf install -y clang-tools-extra && run-clang-tidy --version
+        run: sudo dnf install -y clang-tools-extra && clang-tidy --version
 
       - name: Check out code
         uses: actions/checkout@v4
