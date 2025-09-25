@@ -26,12 +26,12 @@ jobs:
 
       - name: Build TURBO
         run: |
-          cd src/development_tests_amrex_tripolar_grid
+          cd ./turbo/src/development_tests_amrex_tripolar_grid
           cmake -S. -B./build
 
       - name: Analyze code
         run: |
-          cd src/development_tests/amrex/tripolar_grid
+          cd ./turbo/src/development_tests/amrex/tripolar_grid
           run-clang-tidy -p./build \
                          -header-filter="turbo*" \                                    #TODO: determine if needed
                          -exclude-header-filter="/usr/local/.*,/container/.*" \       #TODO: find better way of excluding third party headers
