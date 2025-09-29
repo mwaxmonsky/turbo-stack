@@ -26,8 +26,7 @@ jobs:
 
       - name: Build TURBO
         run: |
-          ls -lah
-          cd ./turbo-stack/src/development_tests_amrex_tripolar_grid
+          cd ./src/development_tests/amrex_tripolar_grid
           cmake -S. -B./build
 
       - name: Analyze code
