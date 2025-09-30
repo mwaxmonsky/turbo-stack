@@ -11,6 +11,10 @@ jobs:
     name: Run Clang-Tidy
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash -elo pipefail {0}
+
     container:
       image: ncarcisl/hpcdev-x86_64:almalinux10-gcc12-mpich-latest
 
@@ -26,7 +30,6 @@ jobs:
 
       - name: Build TURBO
         run: |
-          source /container/config_env.sh
           cd ./src/development_tests/amrex/tripolar_grid
           cmake -S. -B./build
 
