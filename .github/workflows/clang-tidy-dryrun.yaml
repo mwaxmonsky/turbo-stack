@@ -28,8 +28,43 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build HDF5
+        run: |
+          git clone -b hdf5_1.14.6 --single-branch https://github.com/HDFGroup/hdf5.git
+          cmake -DHDF5_BUILD_FORTRAN=ON -DHDF5_BUILD_CPP_LIB=ON -S./hdf5 -B./hdf5_build
+          cd ./hdf5_build
+          make
+          make install
+          cd ..
+          rm -rf ./hdf5 ./hdf5_build
+          ldconfig
+
+      - name: Build google_test
+        run: |
+          git clone -b v1.17.0 --single-branch https://github.com/google/googletest.git
+          cmake -S./googletest -B./googletest_build
+          cd googletest_build
+          make
+          make install
+          cd ..
+          rm -rf googletest
+
+      - name: Add HDF5 to path
+        run: echo "/usr/local/HDF_Group/HDF5/1.14.6/bin" >> $GITHUB_PATH
+
+      - name: Build AMReX
+        run: |
+          git clone -b 25.09 --single-branch https://github.com/AMReX-Codes/amrex.git
+          cmake -DCMAKE_INSTALL_PREFIX=/usr/local/amrex/25.09 -S./amrex -B./amrex_build
+          cd amrex_build
+          make
+          make install
+          cd ..
+          rm -rf amrex amrex_build
+
       - name: Build TURBO
         run: |
+          export CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/usr/local/amrex/25.09
           cd ./src/development_tests/amrex/tripolar_grid
           cmake -S. -B./build
 
