@@ -72,5 +72,6 @@ jobs:
         run: |
           cd ./src/development_tests/amrex/tripolar_grid
           run-clang-tidy -p=./build \
-                         -header-filter=src/                                    #TODO: determine if needed
+                         -header-filter=src/ \                                   #TODO: determine if needed
+                         -extra-arg=-I/container/mpich/4.3.2/include             #TODO: find better way of adding mpi include path
 
