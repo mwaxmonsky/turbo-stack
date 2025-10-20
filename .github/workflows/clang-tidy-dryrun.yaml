@@ -72,6 +72,5 @@ jobs:
         run: |
           cd ./src/development_tests/amrex/tripolar_grid
           run-clang-tidy -p=./build \
-                         -header-filter=turbo* \                                    #TODO: determine if needed
-                         ./src/*                                                      #TODO: Include all source files and header files, not just .cpp files.
+                         -header-filter=turbo*                                    #TODO: determine if needed
 
