@@ -71,7 +71,7 @@ jobs:
       - name: Analyze code
         run: |
           cd ./src/development_tests/amrex/tripolar_grid
-          run-clang-tidy -p./build \
+          run-clang-tidy -p=./build \
                          -header-filter="turbo*" \                                    #TODO: determine if needed
                          -use-color \
                          -extra-arg="-I/container/mpich/4.3.1/include" \              #TODO: find better way of adding mpi include path
