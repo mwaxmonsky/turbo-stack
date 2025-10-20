@@ -73,7 +73,7 @@ jobs:
           cd ./src/development_tests/amrex/tripolar_grid
           run-clang-tidy -p./build \
                          -header-filter="turbo*" \                                    #TODO: determine if needed
-                         -exclude-header-filter="/usr/local/.*,/container/.*" \       #TODO: find better way of excluding third party headers
+#                         -exclude-header-filter="/usr/local/.*,/container/.*" \       #TODO: find better way of excluding third party headers
                          -use-color \
                          -extra-arg="-I/container/mpich/4.3.1/include" \              #TODO: find better way of adding mpi include path
                          ./src/*                                                      #TODO: Include all source files and header files, not just .cpp files.
